@@ -5,6 +5,8 @@
 ![License](https://img.shields.io/badge/license-MIT-yellow)
 [![IRC](https://img.shields.io/badge/OFTC_IRC-%23moss-blue)](https://webchat.oftc.net/?nick=&channels=%23moss)
 
+**ISSUE**: For some reason it does not want to boot on my machine???
+
 ![Moss Boot Demo](etc/moss_demo.gif)
 
 **moss** is a Unix-like, Linux-compatible kernel written in Rust and AArch64
