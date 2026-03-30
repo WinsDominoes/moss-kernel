@@ -41,7 +41,7 @@ if [ -d "$base/build/rootfs" ]; then
     rm -rf "$base/build/rootfs"
 fi
 mkdir -p build/rootfs
-tar -xzf "$base/build/alpine-minirootfs.tar.gz" -C "$base/build/rootfs"
+tar -xzf "$base/build/alpine-minirootfs.tar.gz" --no-same-owner -C "$base/build/rootfs"
 
 # Copy any extra binaries in $base/build/extra_bins to $base/build/rootfs/bin
 if [ -d "$base/build/extra_bins" ]; then
@@ -53,5 +53,9 @@ cd "$base"/usertest
 usertest_binary="$(cargo build --message-format=json | jq -r 'select(.reason == "compiler-artifact") | .filenames[]' | grep "usertest")"
 cp "$usertest_binary" "$base/build/rootfs/bin/usertest"
 
+# mkfs.ext4 -d requires read access to all files/dirs being copied.
+# Alpine's /root is 700 by default, which blocks non-root users.
+chmod 755 "$base/build/rootfs/root"
+
 # make image
-yes | mkfs.ext4 -d "$base/build/rootfs" "$img" || true
+echo y | mkfs.ext4 -d "$base/build/rootfs" "$img"
